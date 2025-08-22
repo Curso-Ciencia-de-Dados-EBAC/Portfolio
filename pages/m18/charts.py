@@ -93,10 +93,6 @@ def plot_regression_line(X: pd.DataFrame, y: pd.Series, _lr: LinearRegression, c
 
 @st.cache_data(show_spinner=False)
 def plot_regression_plane(X: pd.DataFrame, y: pd.Series, _lr: LinearRegression, colname: str) -> go.Figure:
-    # Load MathJax for LaTeX rendering
-    with open(f"js{sep}loadMathJax.js", "r") as f:
-        js = f.read()
-        st.html(f"<script>{js}</script>")
 
     def regression_plane(x, y): return _lr.intercept_ + [x, y] @ _lr.coef_
     _x, _y = X.iloc[:, 0], X.iloc[:, 1]
@@ -123,13 +119,6 @@ def plot_regression_plane(X: pd.DataFrame, y: pd.Series, _lr: LinearRegression, 
         xhoverformat=".3f", yhoverformat=".3f", zhoverformat=".3f")
 
     fig.update_layout(
-        title=dict(
-            text=f"$R^2 = {_lr.score(X, y):.3f}\space|\space RMSE = {root_mean_squared_error(y, _lr.predict(X)):.3f}$",
-            subtitle=dict(
-                text=fr"$z = {_lr.intercept_:.2f} + ({_lr.coef_[0]:.2f})x + ({_lr.coef_[1]:.2f})y$",
-                font_size=14
-            )
-        ),
         autosize=False,
         width=500, height=500,
         margin=dict(l=10, r=10, b=10, t=25)
